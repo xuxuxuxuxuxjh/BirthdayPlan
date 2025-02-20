@@ -10,15 +10,13 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from welcome_page import WelcomePage
 from input_page import InputPage
 from plan_page import PlanPage
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def calc(birthday_year, birthday_month, birthday_day, today_year, today_month, today_day):
-    birthday = datetime(birthday_year, birthday_month, birthday_day)
-    today = datetime(today_year, today_month, today_day)
 
-    # 判断今年生日是否已经过去，如果已经过去，下一个生日为明年
-    if today > datetime(today_year, birthday_month, birthday_day):
+    # 4是为了防止出现平年29号的情况
+    if datetime(4, today_month, today_day) > datetime(4, birthday_month, birthday_day):
         next_birthday_year = today_year + 1
     else:
         next_birthday_year = today_year
@@ -30,9 +28,10 @@ def calc(birthday_year, birthday_month, birthday_day, today_year, today_month, t
 
 
 def calc2(next_birthday_year, next_birthday_month, next_birthday_day, today_year, today_month, today_day):
+    # print(next_birthday_year, next_birthday_month, next_birthday_day)
+    # print(today_year, today_month, today_day)
     next_birthday = datetime(next_birthday_year, next_birthday_month, next_birthday_day)
     today = datetime(today_year, today_month, today_day)
-
     delta = next_birthday - today
     return delta.days
 
@@ -50,6 +49,17 @@ class MainWindow(QMainWindow):
         self.today_day = 0
         self.today_month = 0
         self.today_year = 0
+        self.next_birthday_year = 0
+        self.next_birthday_month = 0
+        self.next_birthday_day = 0
+        self.gap_day = 0
+        self.advance = 0
+        self.advance_day = 0
+        self.advance_month = 0
+        self.advance_year = 0
+        self.prepare_day = 0
+        self.prepare_month = 0
+        self.prepare_year = 0
 
         self.welcome_page.setupUi(self)
         self.welcome_page.pushButton.clicked.connect(self.show_input_page)
@@ -69,15 +79,52 @@ class MainWindow(QMainWindow):
         # print(self.today_year, self.today_month, self.today_day)
         self.plan_page.setupUi(self)
 
-        next_birthday_year, next_birthday_month, next_birthday_day = (
+        self.next_birthday_year, self.next_birthday_month, self.next_birthday_day = (
             calc(self.birthday_year, self.birthday_month, self.birthday_day, self.today_year, self.today_month, self.today_day))
         # print(next_birthday_year, next_birthday_month, next_birthday_day)
-        self.plan_page.next_birthday_year.setValue(next_birthday_year)
-        self.plan_page.next_birthday_month.setValue(next_birthday_month)
-        self.plan_page.next_birthday_day.setValue(next_birthday_day)
+        self.plan_page.next_birthday_year.setValue(self.next_birthday_year)
+        self.plan_page.next_birthday_month.setValue(self.next_birthday_month)
+        self.plan_page.next_birthday_day.setValue(self.next_birthday_day)
 
-        gap_day = calc2(next_birthday_year, next_birthday_month, next_birthday_day, self.today_year, self.today_month, self.today_day)
-        self.plan_page.gap_day.setValue(gap_day)
+        self.gap_day = calc2(self.next_birthday_year, self.next_birthday_month, self.next_birthday_day, self.today_year, self.today_month, self.today_day)
+        self.plan_page.gap_day.setValue(self.gap_day)
+
+        self.plan_page.pushButton_.clicked.connect(lambda: self.show_textBrowser())
+        # self.plan_page.pushButton.clicked.connect(lambda: self.show_result_page())
+
+    def show_textBrowser(self):
+        self.advance = self.plan_page.advance_day.value()
+        day = datetime(self.next_birthday_year, self.next_birthday_month, self.next_birthday_day)
+        day -= timedelta(days=self.advance)
+        self.advance_year = day.year
+        self.advance_month = day.month
+        self.advance_day = day.day
+        output = f'计划为{self.advance_year}年{self.advance_month}月{self.advance_day}日'
+        if day.strftime("%A") == "Monday":
+            day = day - timedelta(days=2)
+            output += f"星期一，由于是工作日，改为{day.year}年{day.month}月{day.day}日星期六"
+        elif day.strftime("%A") == "Tuesday":
+            day = day - timedelta(days=3)
+            output += f"星期二，由于是工作日，改为{day.year}年{day.month}月{day.day}日星期六"
+        elif day.strftime("%A") == "Wednesday":
+            day = day + timedelta(days=3)
+            output += f"星期三，由于是工作日，改为{day.year}年{day.month}月{day.day}日星期六"
+        elif day.strftime("%A") == "Thursday":
+            day = day + timedelta(days=2)
+            output += f"星期四，由于是工作日，改为{day.year}年{day.month}月{day.day}日星期六"
+        elif day.strftime("%A") == "Friday":
+            day = day + timedelta(days=1)
+            output += f"星期五，由于是工作日，改为{day.year}年{day.month}月{day.day}日星期六"
+        elif day.strftime("%A") == "Saturday":
+            output += "星期六"
+        else:
+            output += "星期天"
+
+        self.prepare_day = day.day
+        self.prepare_month = day.month
+        self.prepare_year = day.year
+
+        self.plan_page.textBrowser.setText(output)
 
 if __name__ == '__main__':
     app = QApplication([])

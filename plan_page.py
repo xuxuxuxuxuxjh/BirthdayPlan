@@ -17,7 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QMainWindow,
     QMenuBar, QPushButton, QSizePolicy, QSpacerItem,
-    QSpinBox, QStatusBar, QVBoxLayout, QWidget)
+    QSpinBox, QStatusBar, QTextBrowser, QVBoxLayout,
+    QWidget)
 
 class PlanPage(object):
     def setupUi(self, MainWindow):
@@ -28,14 +29,14 @@ class PlanPage(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.label = QLabel(self.centralwidget)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(200, 40, 351, 151))
+        self.label.setGeometry(QRect(200, 10, 351, 151))
         font = QFont()
         font.setPointSize(28)
         self.label.setFont(font)
         self.label.setAlignment(Qt.AlignmentFlag.AlignJustify|Qt.AlignmentFlag.AlignVCenter)
         self.layoutWidget = QWidget(self.centralwidget)
         self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(170, 160, 388, 178))
+        self.layoutWidget.setGeometry(QRect(170, 130, 388, 178))
         self.horizontalLayout_3 = QHBoxLayout(self.layoutWidget)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -110,7 +111,7 @@ class PlanPage(object):
         self.gap_day = QSpinBox(self.layoutWidget)
         self.gap_day.setObjectName(u"gap_day")
         self.gap_day.setMinimum(0)
-        self.gap_day.setMaximum(366)
+        self.gap_day.setMaximum(1500)
         self.gap_day.setValue(0)
 
         self.horizontalLayout_2.addWidget(self.gap_day)
@@ -139,13 +140,13 @@ class PlanPage(object):
 
         self.pushButton = QPushButton(self.centralwidget)
         self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setGeometry(QRect(320, 410, 81, 31))
+        self.pushButton.setGeometry(QRect(320, 420, 81, 31))
         font1 = QFont()
         font1.setPointSize(12)
         self.pushButton.setFont(font1)
         self.layoutWidget1 = QWidget(self.centralwidget)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
-        self.layoutWidget1.setGeometry(QRect(180, 360, 381, 26))
+        self.layoutWidget1.setGeometry(QRect(180, 330, 381, 26))
         self.horizontalLayout_4 = QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -173,6 +174,9 @@ class PlanPage(object):
 
         self.horizontalLayout_4.addWidget(self.pushButton_)
 
+        self.textBrowser = QTextBrowser(self.centralwidget)
+        self.textBrowser.setObjectName(u"textBrowser")
+        self.textBrowser.setGeometry(QRect(180, 370, 381, 31))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")

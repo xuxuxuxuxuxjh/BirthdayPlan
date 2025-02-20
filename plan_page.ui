@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>40</y>
+      <y>10</y>
       <width>351</width>
       <height>151</height>
      </rect>
@@ -39,7 +39,7 @@
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>160</y>
+      <y>130</y>
       <width>388</width>
       <height>178</height>
      </rect>
@@ -162,7 +162,7 @@
               <number>0</number>
              </property>
              <property name="maximum">
-              <number>366</number>
+              <number>1500</number>
              </property>
              <property name="value">
               <number>0</number>
@@ -214,7 +214,7 @@
     <property name="geometry">
      <rect>
       <x>320</x>
-      <y>410</y>
+      <y>420</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -232,7 +232,7 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>360</y>
+      <y>330</y>
       <width>381</width>
       <height>26</height>
      </rect>
@@ -276,6 +276,16 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QTextBrowser" name="textBrowser">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>370</y>
+      <width>381</width>
+      <height>31</height>
+     </rect>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
