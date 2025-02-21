@@ -6,10 +6,13 @@
 # Pyside6-uic ui.ui -o ui.py
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton,QStackedWidget, QWidget
 from welcome_page import WelcomePage
 from input_page import InputPage
 from plan_page import PlanPage
+from result_page import ResultPage
+from end_page import EndPage
+from end_page import EndPage
 from datetime import datetime, timedelta
 
 
@@ -42,6 +45,8 @@ class MainWindow(QMainWindow):
         self.welcome_page = WelcomePage()
         self.input_page = InputPage()
         self.plan_page = PlanPage()
+        self.result_page = ResultPage()
+        self.end_page = EndPage()
 
         self.birthday_day = 0
         self.birthday_month = 0
@@ -77,6 +82,7 @@ class MainWindow(QMainWindow):
         self.today_year = self.input_page.today_year.value()
         # print(self.birthday_year, self.birthday_month, self.today_day)
         # print(self.today_year, self.today_month, self.today_day)
+        
         self.plan_page.setupUi(self)
 
         self.next_birthday_year, self.next_birthday_month, self.next_birthday_day = (
@@ -90,8 +96,36 @@ class MainWindow(QMainWindow):
         self.plan_page.gap_day.setValue(self.gap_day)
 
         self.plan_page.pushButton_.clicked.connect(lambda: self.show_textBrowser())
-        # self.plan_page.pushButton.clicked.connect(lambda: self.show_result_page())
+        self.plan_page.pushButton.clicked.connect(lambda: self.show_result_page())
 
+
+    def show_plan_page2(self):
+        # self.birthday_day = self.input_page.birthday_day.value()
+        # self.birthday_month = self.input_page.birthday_month.value()
+        # self.birthday_year = self.input_page.birthday_year.value()
+        # self.today_day = self.input_page.today_day.value()
+        # self.today_month = self.input_page.today_month.value()
+        # self.today_year = self.input_page.today_year.value()
+        # print(self.birthday_year, self.birthday_month, self.today_day)
+        # print(self.today_year, self.today_month, self.today_day)
+        
+        
+        self.plan_page.setupUi(self)
+
+        self.next_birthday_year, self.next_birthday_month, self.next_birthday_day = (
+            calc(self.birthday_year, self.birthday_month, self.birthday_day, self.today_year, self.today_month, self.today_day))
+        # print(next_birthday_year, next_birthday_month, next_birthday_day)
+        self.plan_page.next_birthday_year.setValue(self.next_birthday_year)
+        self.plan_page.next_birthday_month.setValue(self.next_birthday_month)
+        self.plan_page.next_birthday_day.setValue(self.next_birthday_day)
+
+        self.gap_day = calc2(self.next_birthday_year, self.next_birthday_month, self.next_birthday_day, self.today_year, self.today_month, self.today_day)
+        self.plan_page.gap_day.setValue(self.gap_day)
+
+        self.plan_page.pushButton_.clicked.connect(lambda: self.show_textBrowser())
+        self.plan_page.pushButton.clicked.connect(lambda: self.show_result_page())
+    
+    
     def show_textBrowser(self):
         self.advance = self.plan_page.advance_day.value()
         day = datetime(self.next_birthday_year, self.next_birthday_month, self.next_birthday_day)
@@ -125,6 +159,29 @@ class MainWindow(QMainWindow):
         self.prepare_year = day.year
 
         self.plan_page.textBrowser.setText(output)
+
+    def show_result_page(self):
+        self.result_page.setupUi(self)
+        
+        birthday_text = f'你下次的生日日期是 {self.next_birthday_year}年{self.next_birthday_month}月{self.next_birthday_day}日'
+        gap_text = f'距离下次生日还有{self.gap_day}天'
+        advance_text = f'距离下次生日前{self.advance}天的日期为 {self.advance_year}年{self.advance_month}月{self.advance_day}日'
+        prepare_text = f'制定生日计划的日期为{self.prepare_year}年{self.prepare_month}月{self.prepare_day}日'
+        self.result_page.textBrowser.setText(f'{birthday_text}\n{gap_text}\n{advance_text}\n{prepare_text}')
+
+        self.result_page.pushButton.clicked.connect(lambda: self.show_plan_page2())
+        self.result_page.pushButton_2.clicked.connect(lambda: self.show_end_page())
+
+    def show_end_page(self):
+        self.end_page.setupUi(self)
+        prepare_text = f'你制定生日计划的日期为{self.prepare_year}年{self.prepare_month}月{self.prepare_day}日'
+        self.end_page.textBrowser.setText(f'{prepare_text}')
+
+    def keyPressEvent(self, event):
+        """监听键盘事件，按下任意键退出"""
+        self.close() 
+        
+
 
 if __name__ == '__main__':
     app = QApplication([])
