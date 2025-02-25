@@ -158,6 +158,10 @@ class MainWindow(QMainWindow):
         self.prepare_month = day.month
         self.prepare_year = day.year
 
+        if day > datetime(self.next_birthday_year, self.next_birthday_month, self.next_birthday_day):
+            output = '找不到合理的周末准备生日，请重新制定'
+        if day < datetime(self.today_year, self.today_month, self.today_day):
+            output = '找不到合理的周末准备生日，请重新制定'
         self.plan_page.textBrowser.setText(output)
 
     def show_result_page(self):
